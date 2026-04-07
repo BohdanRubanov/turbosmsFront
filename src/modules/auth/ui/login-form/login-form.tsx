@@ -7,6 +7,8 @@ import { loginValidator } from "@modules/auth/models/lib/login.validation";
 import {yupResolver} from "@hookform/resolvers/yup"
 import { useRouter } from "expo-router";
 import { useLogin } from "@modules/auth/hooks/login";
+import React from "react";
+import { useLoginMutation } from "@modules/auth/api/userApi";
 interface LoginForm {
 	email: string;
 	password: string
@@ -15,10 +17,14 @@ interface LoginForm {
 
 export function LoginForm() {
 	const { handleSubmit, control, formState } = useForm<LoginForm>({resolver: yupResolver(loginValidator)})
-	const { loginSend } = useLogin();
+	const [ login ] = useLoginMutation()
 	async function onSubmit(data: LoginForm){
-		loginSend(data);
+		const formData = new FormData()
+		formData.append("email", data.email);
+		formData.append("password", data.password);
+		login(formData);
 	}
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.formFields}>

@@ -7,24 +7,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { StepTwoForm } from "@modules/auth/models/types/register.types";
 import { styles } from "./register-step-two-form.styles";
 import { AvatarField } from "../avatar-field/avatar-field";
+import React from "react";
+import { BaseApi } from "@shared/api/baseApi";
+import { userApi, useRegisterMutation } from "@modules/auth/api/userApi";
 
 export function RegisterStepTwoForm() {
-    const params = useLocalSearchParams();
+    const params = useLocalSearchParams<{email: string, username: string, password: string}>();
     const router = useRouter();
+    const formData = new FormData();
+    const [ register ] = useRegisterMutation()
     const { control, handleSubmit } = useForm<StepTwoForm>({
         resolver: yupResolver(stepTwoValidator)
     });
     
     async function onSubmit(data: StepTwoForm) {
-        const finalData = {
-            email: params.email,
-            username: params.username,
-            password: params.password,
-            name: data.name,
-            surname: data.surname,
-            avatar: data.avatar
-        };
-        console.log(finalData);
+        await register({...data, ...params})
     }
 
     return (

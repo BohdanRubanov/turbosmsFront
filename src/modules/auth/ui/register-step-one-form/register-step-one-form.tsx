@@ -6,6 +6,7 @@ import { StepOneForm } from "@modules/auth/models/types/register.types";
 import { Controller, useForm } from "react-hook-form";
 import { stepOneValidator } from "@modules/auth/models/lib/register/step.one.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import React from "react";
 
 
 export function RegisterStepOneForm() {
